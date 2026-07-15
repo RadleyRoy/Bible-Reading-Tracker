@@ -149,17 +149,12 @@ class _PlanCard extends StatelessWidget {
 class PlanMenuButton extends StatelessWidget {
   final Plan plan;
 
-  /// Called after the plan is restarted or edited (e.g. to refresh
-  /// a pinned "today" list on the detail screen).
-  final VoidCallback? onChanged;
-
   /// Called after the plan is deleted.
   final VoidCallback? onDeleted;
 
   const PlanMenuButton({
     super.key,
     required this.plan,
-    this.onChanged,
     this.onDeleted,
   });
 
@@ -177,7 +172,6 @@ class PlanMenuButton extends StatelessWidget {
                 builder: (_) => CreatePlanScreen(existing: plan),
               ),
             );
-            onChanged?.call();
           case 'restart':
             final ok = await confirm(
               context,
@@ -189,7 +183,6 @@ class PlanMenuButton extends StatelessWidget {
             );
             if (ok) {
               await store.restartPlan(plan);
-              onChanged?.call();
             }
           case 'delete':
             final ok = await confirm(

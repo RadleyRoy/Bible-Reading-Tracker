@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'screens/plans_list_screen.dart';
 import 'services/plan_store.dart';
+import 'theme.dart';
 
 void main() {
   runApp(const BibleReadingApp());
@@ -18,15 +19,8 @@ class BibleReadingApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Bible Reading',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF6D4C41)),
-        ),
-        darkTheme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color(0xFF6D4C41),
-            brightness: Brightness.dark,
-          ),
-        ),
+        theme: lightTheme(),
+        darkTheme: darkTheme(),
         home: const PlansListScreen(),
       ),
     );

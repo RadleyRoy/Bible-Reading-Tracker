@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/plan.dart';
+import 'scheduler.dart';
 
 /// Owns the list of plans and persists it as JSON in shared preferences.
 class PlanStore extends ChangeNotifier {
@@ -44,6 +45,7 @@ class PlanStore extends ChangeNotifier {
   /// Persists in-place edits to [plan] (name, dates, book range).
   Future<void> updatePlan(Plan plan) async {
     plan.pruneReadChapters();
+    plan.invalidateAssignment();
     await _persist();
   }
 
@@ -53,6 +55,9 @@ class PlanStore extends ChangeNotifier {
   }
 
   Future<void> toggleChapter(Plan plan, int globalIndex) async {
+    // Pin today's portion from the pre-toggle state so the toggle can
+    // never move chapters in or out of today's list.
+    ensureTodayAssignment(plan, DateTime.now());
     if (!plan.readChapters.remove(globalIndex)) {
       plan.readChapters.add(globalIndex);
     }
@@ -62,6 +67,7 @@ class PlanStore extends ChangeNotifier {
   /// Marks every chapter unread so the plan starts over.
   Future<void> restartPlan(Plan plan) async {
     plan.readChapters.clear();
+    plan.invalidateAssignment();
     plan.startDate = DateTime.now();
     await _persist();
   }

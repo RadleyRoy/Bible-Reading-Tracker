@@ -66,6 +66,34 @@ List<ScheduleDay> buildSchedule({
   return schedule;
 }
 
+/// Pins the portion for today on [plan] if it isn't already pinned.
+///
+/// The assignment is computed once per calendar day from whatever is
+/// unread at that moment and then kept for the rest of the day, so
+/// checking off today's chapters never reshuffles the schedule. It is
+/// recomputed when the day changes, after a restart or edit (see
+/// [Plan.invalidateAssignment]), or when a chapter is un-read on a day
+/// whose portion was empty.
+///
+/// Returns true when a new assignment was computed.
+bool ensureTodayAssignment(Plan plan, DateTime now) {
+  final today = dateOnly(now);
+  final upToDate = plan.assignedDate == today &&
+      (plan.assignedChapters.isNotEmpty || plan.unreadChapters.isEmpty);
+  if (upToDate) return false;
+
+  final schedule = buildSchedule(
+    unread: plan.unreadChapters,
+    today: today,
+    endDate: plan.endDate,
+  );
+  plan.assignedDate = today;
+  plan.assignedChapters = schedule.isEmpty
+      ? <int>[]
+      : [for (final c in schedule.first.chapters) c.globalIndex];
+  return true;
+}
+
 /// Derived, display-ready numbers for a plan as of [now].
 class PlanStats {
   final int totalChapters;
@@ -92,15 +120,29 @@ class PlanStats {
 }
 
 PlanStats computeStats(Plan plan, DateTime now) {
+  ensureTodayAssignment(plan, now);
+
   final chapters = plan.chapters;
   final totalWords = chapters.fold(0, (sum, c) => sum + c.words);
   final readWords = chapters
       .where((c) => plan.isRead(c.globalIndex))
       .fold(0, (sum, c) => sum + c.words);
 
-  final schedule = buildSchedule(
-    unread: plan.unreadChapters,
-    today: now,
+  final today = dateOnly(now);
+  final assigned = plan.assignedChapters.toSet();
+  final todayPortion = plan.assignedChapters.isEmpty
+      ? null
+      : ScheduleDay(
+          today, [for (final i in plan.assignedChapters) allChapters[i]]);
+
+  // Days after today are balanced over everything unread that is not part
+  // of today's pinned portion, so they only move when chapters outside
+  // today's range are marked read or unread.
+  final upcoming = buildSchedule(
+    unread: plan.unreadChapters
+        .where((c) => !assigned.contains(c.globalIndex))
+        .toList(),
+    today: today.add(const Duration(days: 1)),
     endDate: plan.endDate,
   );
 
@@ -109,8 +151,8 @@ PlanStats computeStats(Plan plan, DateTime now) {
     readCount: plan.readChapters.length,
     totalWords: totalWords,
     readWords: readWords,
-    daysLeft: dateOnly(plan.endDate).difference(dateOnly(now)).inDays + 1,
-    today: schedule.isEmpty ? null : schedule.first,
-    upcoming: schedule.length > 1 ? schedule.sublist(1) : const [],
+    daysLeft: dateOnly(plan.endDate).difference(today).inDays + 1,
+    today: todayPortion,
+    upcoming: upcoming,
   );
 }

@@ -8,40 +8,15 @@ import '../services/scheduler.dart';
 import '../utils.dart';
 import 'plans_list_screen.dart';
 
-class PlanDetailScreen extends StatefulWidget {
+class PlanDetailScreen extends StatelessWidget {
   final String planId;
 
   const PlanDetailScreen({super.key, required this.planId});
 
   @override
-  State<PlanDetailScreen> createState() => _PlanDetailScreenState();
-}
-
-class _PlanDetailScreenState extends State<PlanDetailScreen> {
-  /// Today's portion, pinned when the screen opens so checked chapters
-  /// stay visible instead of being rebalanced away mid-session.
-  List<int> _todayIndices = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _refreshToday();
-  }
-
-  void _refreshToday() {
-    final plan = context.read<PlanStore>().planById(widget.planId);
-    if (plan == null) return;
-    final stats = computeStats(plan, DateTime.now());
-    setState(() {
-      _todayIndices =
-          stats.today?.chapters.map((c) => c.globalIndex).toList() ?? [];
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final store = context.watch<PlanStore>();
-    final plan = store.planById(widget.planId);
+    final plan = store.planById(planId);
     if (plan == null) {
       // Plan was deleted; nothing to show.
       return const Scaffold(body: SizedBox.shrink());
@@ -55,7 +30,6 @@ class _PlanDetailScreenState extends State<PlanDetailScreen> {
         actions: [
           PlanMenuButton(
             plan: plan,
-            onChanged: _refreshToday,
             onDeleted: () => Navigator.pop(context),
           ),
         ],
@@ -67,10 +41,10 @@ class _PlanDetailScreenState extends State<PlanDetailScreen> {
           const SizedBox(height: 12),
           if (stats.isComplete)
             const _CompletedCard()
-          else
+          else if (stats.today != null)
             _TodayCard(
               plan: plan,
-              todayIndices: _todayIndices,
+              chapters: stats.today!.chapters,
               isOverdue: stats.isOverdue,
             ),
           if (stats.upcoming.isNotEmpty) ...[
@@ -178,12 +152,12 @@ class _CompletedCard extends StatelessWidget {
 
 class _TodayCard extends StatelessWidget {
   final Plan plan;
-  final List<int> todayIndices;
+  final List<ChapterRef> chapters;
   final bool isOverdue;
 
   const _TodayCard({
     required this.plan,
-    required this.todayIndices,
+    required this.chapters,
     required this.isOverdue,
   });
 
@@ -191,7 +165,6 @@ class _TodayCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final store = context.read<PlanStore>();
-    final chapters = [for (final i in todayIndices) allChapters[i]];
     final words = chapters.fold(0, (sum, c) => sum + c.words);
     final allDone =
         chapters.isNotEmpty && chapters.every((c) => plan.isRead(c.globalIndex));

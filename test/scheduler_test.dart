@@ -136,6 +136,61 @@ void main() {
     });
   });
 
+  group('today assignment stability', () {
+    test("reading today's chapters does not shift tomorrow", () {
+      final plan = makePlan(days: 10, startBook: 39, endBook: 39); // Matthew
+      final s1 = computeStats(plan, today);
+      final todayList = s1.today!.chapters.map((c) => c.globalIndex).toList();
+      final tomorrowFirst = s1.upcoming.first.chapters.first.globalIndex;
+      expect(tomorrowFirst, todayList.last + 1);
+
+      plan.readChapters.add(todayList.first);
+      final s2 = computeStats(plan, today);
+      expect(s2.today!.chapters.map((c) => c.globalIndex), todayList);
+      expect(s2.upcoming.first.chapters.first.globalIndex, tomorrowFirst);
+
+      // Unmarking it again also changes nothing.
+      plan.readChapters.remove(todayList.first);
+      final s3 = computeStats(plan, today);
+      expect(s3.today!.chapters.map((c) => c.globalIndex), todayList);
+      expect(s3.upcoming.first.chapters.first.globalIndex, tomorrowFirst);
+    });
+
+    test("reading into tomorrow's range shifts only the upcoming days", () {
+      final plan = makePlan(days: 10, startBook: 39, endBook: 39);
+      final s1 = computeStats(plan, today);
+      final todayList = s1.today!.chapters.map((c) => c.globalIndex).toList();
+      final tomorrowFirst = s1.upcoming.first.chapters.first.globalIndex;
+
+      plan.readChapters.add(tomorrowFirst);
+      final s2 = computeStats(plan, today);
+      expect(s2.today!.chapters.map((c) => c.globalIndex), todayList);
+      expect(s2.upcoming.first.chapters.first.globalIndex, tomorrowFirst + 1);
+    });
+
+    test('a new day gets a fresh assignment', () {
+      final plan = makePlan(days: 10, startBook: 39, endBook: 39);
+      final s1 = computeStats(plan, today);
+      final todayList = s1.today!.chapters.map((c) => c.globalIndex).toList();
+      plan.readChapters.addAll(todayList);
+
+      final tomorrow = today.add(const Duration(days: 1));
+      final s2 = computeStats(plan, tomorrow);
+      expect(plan.assignedDate, tomorrow);
+      expect(s2.today!.chapters.first.globalIndex, todayList.last + 1);
+    });
+
+    test('un-reading on a day with an empty portion assigns it to today', () {
+      final plan = makePlan(days: 10, startBook: 64, endBook: 64); // Jude
+      plan.readChapters.add(bookStartIndex[64]);
+      expect(computeStats(plan, today).today, isNull);
+
+      plan.readChapters.remove(bookStartIndex[64]);
+      final stats = computeStats(plan, today);
+      expect(stats.today!.chapters.single.globalIndex, bookStartIndex[64]);
+    });
+  });
+
   group('computeStats', () {
     test('reports progress, days left, and today portion', () {
       final plan = makePlan(days: 100, startBook: 39, endBook: 65); // NT

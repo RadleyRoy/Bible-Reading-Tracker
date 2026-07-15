@@ -24,6 +24,8 @@ void main() {
     await store.load();
     final plan = makePlan();
     plan.readChapters.addAll([929, 930, 955]);
+    plan.assignedDate = DateTime(2026, 7, 16);
+    plan.assignedChapters = [956, 957];
     await store.addPlan(plan);
 
     final reloaded = PlanStore();
@@ -36,6 +38,23 @@ void main() {
     expect(p.endBook, 65);
     expect(p.endDate, DateTime(2026, 10, 12));
     expect(p.readChapters, {929, 930, 955});
+    expect(p.assignedDate, DateTime(2026, 7, 16));
+    expect(p.assignedChapters, [956, 957]);
+  });
+
+  test('plans saved before the assignment fields existed still load',
+      () async {
+    SharedPreferences.setMockInitialValues({
+      'plans_v1': '[{"id":"1","name":"Old","startBook":0,"endBook":65,'
+          '"startDate":"2026-07-15T00:00:00.000",'
+          '"endDate":"2026-12-31T00:00:00.000","readChapters":[0,1]}]',
+    });
+    final store = PlanStore();
+    await store.load();
+    final p = store.plans.single;
+    expect(p.readChapters, {0, 1});
+    expect(p.assignedDate, isNull);
+    expect(p.assignedChapters, isEmpty);
   });
 
   test('toggleChapter marks and unmarks', () async {
@@ -59,6 +78,8 @@ void main() {
 
     await store.restartPlan(plan);
     expect(plan.readChapters, isEmpty);
+    expect(plan.assignedDate, isNull);
+    expect(plan.assignedChapters, isEmpty);
 
     final reloaded = PlanStore();
     await reloaded.load();
