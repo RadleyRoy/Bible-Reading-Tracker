@@ -77,8 +77,8 @@ class Plan {
     Set<int>? readChapters,
     this.assignedDate,
     List<int>? assignedChapters,
-  })  : readChapters = readChapters ?? <int>{},
-        assignedChapters = assignedChapters ?? <int>[];
+  }) : readChapters = readChapters ?? <int>{},
+       assignedChapters = assignedChapters ?? <int>[];
 
   /// All chapters covered by this plan, in reading order.
   List<ChapterRef> get chapters {
@@ -115,30 +115,30 @@ class Plan {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'startBook': startBook,
-        'endBook': endBook,
-        'startDate': startDate.toIso8601String(),
-        'endDate': endDate.toIso8601String(),
-        'readChapters': readChapters.toList()..sort(),
-        'assignedDate': assignedDate?.toIso8601String(),
-        'assignedChapters': assignedChapters,
-      };
+    'id': id,
+    'name': name,
+    'startBook': startBook,
+    'endBook': endBook,
+    'startDate': startDate.toIso8601String(),
+    'endDate': endDate.toIso8601String(),
+    'readChapters': readChapters.toList()..sort(),
+    'assignedDate': assignedDate?.toIso8601String(),
+    'assignedChapters': assignedChapters,
+  };
 
   factory Plan.fromJson(Map<String, dynamic> json) => Plan(
-        id: json['id'] as String,
-        name: json['name'] as String,
-        startBook: json['startBook'] as int,
-        endBook: json['endBook'] as int,
-        startDate: DateTime.parse(json['startDate'] as String),
-        endDate: DateTime.parse(json['endDate'] as String),
-        readChapters:
-            (json['readChapters'] as List).map((e) => e as int).toSet(),
-        assignedDate: json['assignedDate'] == null
-            ? null
-            : DateTime.parse(json['assignedDate'] as String),
-        assignedChapters:
-            (json['assignedChapters'] as List?)?.map((e) => e as int).toList(),
-      );
+    id: json['id'] as String,
+    name: json['name'] as String,
+    startBook: json['startBook'] as int,
+    endBook: json['endBook'] as int,
+    startDate: DateTime.parse(json['startDate'] as String),
+    endDate: DateTime.parse(json['endDate'] as String),
+    readChapters: (json['readChapters'] as List).map((e) => e as int).toSet(),
+    assignedDate: json['assignedDate'] == null
+        ? null
+        : DateTime.parse(json['assignedDate'] as String),
+    assignedChapters: (json['assignedChapters'] as List?)
+        ?.map((e) => e as int)
+        .toList(),
+  );
 }

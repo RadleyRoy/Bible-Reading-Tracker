@@ -78,7 +78,8 @@ List<ScheduleDay> buildSchedule({
 /// Returns true when a new assignment was computed.
 bool ensureTodayAssignment(Plan plan, DateTime now) {
   final today = dateOnly(now);
-  final upToDate = plan.assignedDate == today &&
+  final upToDate =
+      plan.assignedDate == today &&
       (plan.assignedChapters.isNotEmpty || plan.unreadChapters.isEmpty);
   if (upToDate) return false;
 
@@ -132,8 +133,9 @@ PlanStats computeStats(Plan plan, DateTime now) {
   final assigned = plan.assignedChapters.toSet();
   final todayPortion = plan.assignedChapters.isEmpty
       ? null
-      : ScheduleDay(
-          today, [for (final i in plan.assignedChapters) allChapters[i]]);
+      : ScheduleDay(today, [
+          for (final i in plan.assignedChapters) allChapters[i],
+        ]);
 
   // Days after today are balanced over everything unread that is not part
   // of today's pinned portion, so they only move when chapters outside

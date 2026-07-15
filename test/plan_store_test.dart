@@ -7,13 +7,13 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   Plan makePlan() => Plan(
-        id: '42',
-        name: 'New Testament in 90 days',
-        startBook: 39,
-        endBook: 65,
-        startDate: DateTime(2026, 7, 15),
-        endDate: DateTime(2026, 10, 12),
-      );
+    id: '42',
+    name: 'New Testament in 90 days',
+    startBook: 39,
+    endBook: 65,
+    startDate: DateTime(2026, 7, 15),
+    endDate: DateTime(2026, 10, 12),
+  );
 
   setUp(() {
     SharedPreferences.setMockInitialValues({});
@@ -42,10 +42,10 @@ void main() {
     expect(p.assignedChapters, [956, 957]);
   });
 
-  test('plans saved before the assignment fields existed still load',
-      () async {
+  test('plans saved before the assignment fields existed still load', () async {
     SharedPreferences.setMockInitialValues({
-      'plans_v1': '[{"id":"1","name":"Old","startBook":0,"endBook":65,'
+      'plans_v1':
+          '[{"id":"1","name":"Old","startBook":0,"endBook":65,'
           '"startDate":"2026-07-15T00:00:00.000",'
           '"endDate":"2026-12-31T00:00:00.000","readChapters":[0,1]}]',
     });

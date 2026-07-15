@@ -20,13 +20,12 @@ class PlansListScreen extends StatelessWidget {
       body: !store.isLoaded
           ? const Center(child: CircularProgressIndicator())
           : store.plans.isEmpty
-              ? const _EmptyState()
-              : ListView.builder(
-                  padding: const EdgeInsets.only(bottom: 88),
-                  itemCount: store.plans.length,
-                  itemBuilder: (context, i) =>
-                      _PlanCard(plan: store.plans[i]),
-                ),
+          ? const _EmptyState()
+          : ListView.builder(
+              padding: const EdgeInsets.only(bottom: 88),
+              itemCount: store.plans.length,
+              itemBuilder: (context, i) => _PlanCard(plan: store.plans[i]),
+            ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => Navigator.push(
           context,
@@ -50,11 +49,16 @@ class _EmptyState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.menu_book,
-                size: 72, color: Theme.of(context).colorScheme.primary),
+            Icon(
+              Icons.menu_book,
+              size: 72,
+              color: Theme.of(context).colorScheme.primary,
+            ),
             const SizedBox(height: 16),
-            Text('No reading plans yet',
-                style: Theme.of(context).textTheme.titleLarge),
+            Text(
+              'No reading plans yet',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
             const SizedBox(height: 8),
             const Text(
               'Create a plan by choosing what to read and when to '
@@ -89,7 +93,7 @@ class _PlanCard extends StatelessWidget {
       statusLine = today == null
           ? 'Ends ${formatDate(plan.endDate)}'
           : 'Today: ${today.chapters.length} chapters (~${formatInt(today.words)} words) '
-              '· ${stats.daysLeft} days left';
+                '· ${stats.daysLeft} days left';
     }
 
     return Card(
@@ -98,9 +102,7 @@ class _PlanCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         onTap: () => Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (_) => PlanDetailScreen(planId: plan.id),
-          ),
+          MaterialPageRoute(builder: (_) => PlanDetailScreen(planId: plan.id)),
         ),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 4, 16),
@@ -152,11 +154,7 @@ class PlanMenuButton extends StatelessWidget {
   /// Called after the plan is deleted.
   final VoidCallback? onDeleted;
 
-  const PlanMenuButton({
-    super.key,
-    required this.plan,
-    this.onDeleted,
-  });
+  const PlanMenuButton({super.key, required this.plan, this.onDeleted});
 
   @override
   Widget build(BuildContext context) {
@@ -188,7 +186,8 @@ class PlanMenuButton extends StatelessWidget {
             final ok = await confirm(
               context,
               title: 'Delete plan?',
-              message: '"${plan.name}" and its progress will be permanently '
+              message:
+                  '"${plan.name}" and its progress will be permanently '
                   'deleted.',
               action: 'Delete',
             );

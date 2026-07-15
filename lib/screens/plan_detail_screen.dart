@@ -28,10 +28,7 @@ class PlanDetailScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(plan.name),
         actions: [
-          PlanMenuButton(
-            plan: plan,
-            onDeleted: () => Navigator.pop(context),
-          ),
+          PlanMenuButton(plan: plan, onDeleted: () => Navigator.pop(context)),
         ],
       ),
       body: ListView(
@@ -54,8 +51,10 @@ class PlanDetailScreen extends StatelessWidget {
           const SizedBox(height: 12),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: Text('All chapters',
-                style: Theme.of(context).textTheme.titleMedium),
+            child: Text(
+              'All chapters',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
           ),
           const SizedBox(height: 4),
           for (var b = plan.startBook; b <= plan.endBook; b++)
@@ -79,10 +78,12 @@ class _ProgressHeader extends StatelessWidget {
     if (stats.isComplete) {
       deadline = 'Finished — ends ${formatDate(plan.endDate)}';
     } else if (stats.isOverdue) {
-      deadline = 'End date passed (${formatDate(plan.endDate)}) — '
+      deadline =
+          'End date passed (${formatDate(plan.endDate)}) — '
           'edit the plan to pick a new date';
     } else {
-      deadline = '${stats.daysLeft} ${stats.daysLeft == 1 ? 'day' : 'days'} '
+      deadline =
+          '${stats.daysLeft} ${stats.daysLeft == 1 ? 'day' : 'days'} '
           'left · ends ${formatDate(plan.endDate)}';
     }
 
@@ -138,11 +139,15 @@ class _CompletedCard extends StatelessWidget {
           children: [
             const Icon(Icons.emoji_events, size: 48, color: Colors.amber),
             const SizedBox(height: 8),
-            Text('Plan complete!',
-                style: Theme.of(context).textTheme.titleLarge),
+            Text(
+              'Plan complete!',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
             const SizedBox(height: 4),
-            const Text('Every chapter has been read. '
-                'Restart the plan from the menu to read it again.'),
+            const Text(
+              'Every chapter has been read. '
+              'Restart the plan from the menu to read it again.',
+            ),
           ],
         ),
       ),
@@ -167,7 +172,8 @@ class _TodayCard extends StatelessWidget {
     final store = context.read<PlanStore>();
     final words = chapters.fold(0, (sum, c) => sum + c.words);
     final allDone =
-        chapters.isNotEmpty && chapters.every((c) => plan.isRead(c.globalIndex));
+        chapters.isNotEmpty &&
+        chapters.every((c) => plan.isRead(c.globalIndex));
 
     return Card(
       child: Padding(
@@ -194,11 +200,11 @@ class _TodayCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Row(
                   children: [
-                    Icon(Icons.check_circle,
-                        color: theme.colorScheme.primary),
+                    Icon(Icons.check_circle, color: theme.colorScheme.primary),
                     const SizedBox(width: 8),
                     const Expanded(
-                        child: Text('Done for today — see you tomorrow!')),
+                      child: Text('Done for today — see you tomorrow!'),
+                    ),
                   ],
                 ),
               ),
@@ -272,9 +278,9 @@ class _BookTile extends StatelessWidget {
     final store = context.read<PlanStore>();
     final book = kjvBooks[bookIndex];
     final start = bookStartIndex[bookIndex];
-    final readInBook = Iterable<int>.generate(book.chapterCount)
-        .where((c) => plan.isRead(start + c))
-        .length;
+    final readInBook = Iterable<int>.generate(
+      book.chapterCount,
+    ).where((c) => plan.isRead(start + c)).length;
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 2),
@@ -283,8 +289,10 @@ class _BookTile extends StatelessWidget {
         title: Text(book.name),
         subtitle: Text('$readInBook / ${book.chapterCount} read'),
         trailing: readInBook == book.chapterCount
-            ? Icon(Icons.check_circle,
-                color: Theme.of(context).colorScheme.primary)
+            ? Icon(
+                Icons.check_circle,
+                color: Theme.of(context).colorScheme.primary,
+              )
             : null,
         children: [
           Padding(

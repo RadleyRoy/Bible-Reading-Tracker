@@ -7,13 +7,13 @@ void main() {
   final today = DateTime(2026, 7, 15);
 
   Plan makePlan({int startBook = 0, int endBook = 65, int days = 365}) => Plan(
-        id: 'test',
-        name: 'Test',
-        startBook: startBook,
-        endBook: endBook,
-        startDate: today,
-        endDate: today.add(Duration(days: days - 1)),
-      );
+    id: 'test',
+    name: 'Test',
+    startBook: startBook,
+    endBook: endBook,
+    startDate: today,
+    endDate: today.add(Duration(days: days - 1)),
+  );
 
   group('KJV data', () {
     test('has 66 books, 1,189 chapters, and the expected word total', () {
@@ -55,8 +55,9 @@ void main() {
         endDate: plan.endDate,
       );
       final mean = kjvTotalWords / 365;
-      final largestChapter =
-          allChapters.map((c) => c.words).reduce((a, b) => a > b ? a : b);
+      final largestChapter = allChapters
+          .map((c) => c.words)
+          .reduce((a, b) => a > b ? a : b);
       for (final day in schedule) {
         expect(day.chapters, isNotEmpty);
         // No day may deviate from the average by more than one chapter.
@@ -87,8 +88,10 @@ void main() {
       final flat = [for (final d in rebalanced) ...d.chapters];
       expect(flat.length, 28 - plan.readChapters.length);
       expect(rebalanced.length, 10);
-      expect(flat.first.globalIndex,
-          first.take(2).last.chapters.last.globalIndex + 1);
+      expect(
+        flat.first.globalIndex,
+        first.take(2).last.chapters.last.globalIndex + 1,
+      );
     });
 
     test('past end date puts everything on today', () {
@@ -113,9 +116,12 @@ void main() {
       expect(schedule.single.chapters.length, 1);
     });
 
-    test('more days than chapters: at most one chapter per day, none lost',
-        () {
-      final plan = makePlan(days: 30, startBook: 49, endBook: 49); // Phil., 4 ch
+    test('more days than chapters: at most one chapter per day, none lost', () {
+      final plan = makePlan(
+        days: 30,
+        startBook: 49,
+        endBook: 49,
+      ); // Phil., 4 ch
       final schedule = buildSchedule(
         unread: plan.unreadChapters,
         today: today,
@@ -129,10 +135,7 @@ void main() {
     });
 
     test('empty unread list yields empty schedule', () {
-      expect(
-        buildSchedule(unread: [], today: today, endDate: today),
-        isEmpty,
-      );
+      expect(buildSchedule(unread: [], today: today, endDate: today), isEmpty);
     });
   });
 

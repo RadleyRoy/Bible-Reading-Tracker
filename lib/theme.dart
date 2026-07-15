@@ -26,16 +26,17 @@ ThemeData lightTheme() {
 }
 
 ThemeData darkTheme() {
-  final scheme = ColorScheme.fromSeed(
-    seedColor: paletteBlue,
-    brightness: Brightness.dark,
-  ).copyWith(
-    secondary: paletteGray,
-    surface: paletteBlack,
-    surfaceContainerLow: paletteCharcoal,
-    surfaceContainer: paletteCharcoal,
-    surfaceContainerHighest: paletteDarkGray,
-    outline: paletteGray,
-  );
+  final scheme =
+      ColorScheme.fromSeed(
+        seedColor: paletteBlue,
+        brightness: Brightness.dark,
+      ).copyWith(
+        secondary: paletteGray,
+        surface: paletteBlack,
+        surfaceContainerLow: paletteCharcoal,
+        surfaceContainer: paletteCharcoal,
+        surfaceContainerHighest: paletteDarkGray,
+        outline: paletteGray,
+      );
   return ThemeData(colorScheme: scheme);
 }

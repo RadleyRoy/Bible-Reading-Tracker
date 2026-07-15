@@ -94,14 +94,16 @@ class _CreatePlanScreenState extends State<CreatePlanScreen> {
     final existing = widget.existing;
 
     if (existing == null) {
-      await store.addPlan(Plan(
-        id: DateTime.now().microsecondsSinceEpoch.toString(),
-        name: _nameController.text.trim(),
-        startBook: _startBook,
-        endBook: _endBook,
-        startDate: dateOnly(DateTime.now()),
-        endDate: _endDate,
-      ));
+      await store.addPlan(
+        Plan(
+          id: DateTime.now().microsecondsSinceEpoch.toString(),
+          name: _nameController.text.trim(),
+          startBook: _startBook,
+          endBook: _endBook,
+          startDate: dateOnly(DateTime.now()),
+          endDate: _endDate,
+        ),
+      );
     } else {
       existing.name = _nameController.text.trim();
       existing.startBook = _startBook;
@@ -213,7 +215,8 @@ class _CreatePlanScreenState extends State<CreatePlanScreen> {
               onPressed: _save,
               icon: const Icon(Icons.check),
               label: Text(
-                  widget.existing == null ? 'Create plan' : 'Save changes'),
+                widget.existing == null ? 'Create plan' : 'Save changes',
+              ),
             ),
           ],
         ),

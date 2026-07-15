@@ -1,5 +1,7 @@
 # Bible Reading Tracker
 
+[![CI](https://github.com/RadleyRoy/Bible-Reading-Tracker/actions/workflows/ci.yml/badge.svg)](https://github.com/RadleyRoy/Bible-Reading-Tracker/actions/workflows/ci.yml)
+
 A simple, offline Android app for tracking your KJV Bible reading. Pick what
 you want to read and when you want to finish — the app splits the chapters
 into daily portions that are **balanced by word count**, so every day's
@@ -48,6 +50,15 @@ progress is stored on your phone.
   daily load.
 - **Plan detail** — today's checklist, the next few days, overall progress,
   and a per-book chapter grid for marking anything read or unread.
+
+## Installing
+
+Grab `bible-reading-tracker-<version>.apk` from the
+[Releases page](https://github.com/RadleyRoy/Bible-Reading-Tracker/releases)
+on your phone and open it to install (allow "Install unknown apps" if asked).
+Every push to `main` is also validated by CI — formatting, static analysis,
+the full test suite, and a release APK build — and tagged versions (`v*`)
+are built and published to Releases automatically.
 
 ## Building it yourself
 

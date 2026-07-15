@@ -4,8 +4,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  testWidgets('create a plan, mark chapters read, and restart it',
-      (tester) async {
+  testWidgets('create a plan, mark chapters read, and restart it', (
+    tester,
+  ) async {
     SharedPreferences.setMockInitialValues({});
     await tester.pumpWidget(const BibleReadingApp());
     await tester.pumpAndSettle();
