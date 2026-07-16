@@ -1,4 +1,5 @@
 import 'package:bible_reading/main.dart';
+import 'package:bible_reading/services/bible_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,6 +9,12 @@ void main() {
     tester,
   ) async {
     SharedPreferences.setMockInitialValues({});
+    // Preload the books the reader opens below; real asset IO cannot
+    // complete inside the fake-async test zone.
+    await tester.runAsync(() async {
+      await BibleText.chapterVerses(0, 1); // Genesis
+      await BibleText.chapterVerses(39, 1); // Matthew
+    });
     await tester.pumpWidget(const BibleReadingApp());
     await tester.pumpAndSettle();
 
@@ -65,5 +72,46 @@ void main() {
     await tester.pumpAndSettle();
     // The header is scrolled out of view, so check the book subtitle.
     expect(find.text('1 / 28 read'), findsOneWidget);
+
+    // Continue reading from the plan: opens the first unread chapter.
+    // Scroll all the way back to the top so the Today card is tappable.
+    await tester.drag(find.byType(ListView).first, const Offset(0, 3000));
+    await tester.pumpAndSettle();
+    final continueButton = find.textContaining('Continue reading — Matthew 1');
+    await tester.tap(continueButton);
+    await tester.pumpAndSettle();
+    expect(
+      find.textContaining('The book of the generation', findRichText: true),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Mark read & continue'));
+    await tester.pumpAndSettle();
+    // Chapter 3 is already read, so after Matthew 1 comes Matthew 2.
+    expect(find.text('Matthew 2'), findsOneWidget);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+
+    // Free reading from the Read tab.
+    await tester.tap(find.text('Read'));
+    await tester.pumpAndSettle();
+    expect(find.text('Read the Bible'), findsOneWidget);
+    await tester.tap(find.text('Genesis'));
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.descendant(of: find.byType(Wrap), matching: find.text('2')).first,
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Genesis 2'), findsOneWidget);
+    expect(
+      find.textContaining('Thus the heavens', findRichText: true),
+      findsOneWidget,
+    );
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    // The browser remembers where free reading left off.
+    expect(find.text('Continue reading'), findsOneWidget);
+    expect(find.text('Genesis 2'), findsOneWidget);
   });
 }

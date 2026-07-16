@@ -99,6 +99,21 @@ class Plan {
 
   bool get isComplete => readChapters.length >= totalChapters;
 
+  /// Where to continue reading: the first unread chapter of today's pinned
+  /// portion, else the first unread chapter in plan order; null when the
+  /// plan is complete.
+  int? get nextUnreadChapter {
+    for (final i in assignedChapters) {
+      if (!readChapters.contains(i)) return i;
+    }
+    final start = bookStartIndex[startBook];
+    final end = bookStartIndex[endBook] + kjvBooks[endBook].chapterCount;
+    for (var i = start; i < end; i++) {
+      if (!readChapters.contains(i)) return i;
+    }
+    return null;
+  }
+
   /// Drops read marks that fall outside the current book range
   /// (used after editing the plan's portion).
   void pruneReadChapters() {

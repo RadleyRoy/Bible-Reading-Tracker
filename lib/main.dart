@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'screens/plans_list_screen.dart';
+import 'screens/home_screen.dart';
 import 'services/plan_store.dart';
 import 'theme.dart';
 
@@ -21,7 +21,7 @@ class BibleReadingApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: lightTheme(),
         darkTheme: darkTheme(),
-        home: const PlansListScreen(),
+        home: const HomeScreen(),
       ),
     );
   }

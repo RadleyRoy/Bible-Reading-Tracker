@@ -7,6 +7,7 @@ import '../services/plan_store.dart';
 import '../services/scheduler.dart';
 import '../utils.dart';
 import 'plans_list_screen.dart';
+import 'reader_screen.dart';
 
 class PlanDetailScreen extends StatelessWidget {
   final String planId;
@@ -206,6 +207,29 @@ class _TodayCard extends StatelessWidget {
                       child: Text('Done for today — see you tomorrow!'),
                     ),
                   ],
+                ),
+              ),
+            if (plan.nextUnreadChapter != null)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: FilledButton.icon(
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => ReaderScreen(
+                          globalIndex: plan.nextUnreadChapter!,
+                          planId: plan.id,
+                        ),
+                      ),
+                    ),
+                    icon: const Icon(Icons.menu_book),
+                    label: Text(
+                      'Continue reading — '
+                      '${allChapters[plan.nextUnreadChapter!].reference}',
+                    ),
+                  ),
                 ),
               ),
             for (final c in chapters)

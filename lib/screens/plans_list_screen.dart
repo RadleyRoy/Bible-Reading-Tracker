@@ -7,6 +7,7 @@ import '../services/scheduler.dart';
 import '../utils.dart';
 import 'create_plan_screen.dart';
 import 'plan_detail_screen.dart';
+import 'reader_screen.dart';
 
 class PlansListScreen extends StatelessWidget {
   const PlansListScreen({super.key});
@@ -17,15 +18,31 @@ class PlansListScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Bible Reading Plans')),
-      body: !store.isLoaded
-          ? const Center(child: CircularProgressIndicator())
-          : store.plans.isEmpty
-          ? const _EmptyState()
-          : ListView.builder(
-              padding: const EdgeInsets.only(bottom: 88),
-              itemCount: store.plans.length,
-              itemBuilder: (context, i) => _PlanCard(plan: store.plans[i]),
+      body: Column(
+        children: [
+          Expanded(
+            child: !store.isLoaded
+                ? const Center(child: CircularProgressIndicator())
+                : store.plans.isEmpty
+                ? const _EmptyState()
+                : ListView.builder(
+                    padding: const EdgeInsets.only(bottom: 88),
+                    itemCount: store.plans.length,
+                    itemBuilder: (context, i) =>
+                        _PlanCard(plan: store.plans[i]),
+                  ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 6),
+            child: Text(
+              'created by radley',
+              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                color: Theme.of(context).colorScheme.outline,
+              ),
             ),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => Navigator.push(
           context,
@@ -114,6 +131,20 @@ class _PlanCard extends StatelessWidget {
                   Expanded(
                     child: Text(plan.name, style: theme.textTheme.titleMedium),
                   ),
+                  if (plan.nextUnreadChapter != null)
+                    IconButton(
+                      tooltip: 'Continue reading',
+                      icon: const Icon(Icons.play_circle_outline),
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ReaderScreen(
+                            globalIndex: plan.nextUnreadChapter!,
+                            planId: plan.id,
+                          ),
+                        ),
+                      ),
+                    ),
                   PlanMenuButton(plan: plan),
                 ],
               ),

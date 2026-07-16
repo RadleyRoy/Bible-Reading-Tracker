@@ -64,6 +64,14 @@ class PlanStore extends ChangeNotifier {
     await _persist();
   }
 
+  /// Marks a chapter read from the reader (no-op if already read).
+  Future<void> markRead(Plan plan, int globalIndex) async {
+    if (plan.readChapters.contains(globalIndex)) return;
+    ensureTodayAssignment(plan, DateTime.now());
+    plan.readChapters.add(globalIndex);
+    await _persist();
+  }
+
   /// Marks every chapter unread so the plan starts over.
   Future<void> restartPlan(Plan plan) async {
     plan.readChapters.clear();

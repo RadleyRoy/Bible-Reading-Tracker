@@ -11,5 +11,6 @@ void main() {
     expect(find.text('Bible Reading Plans'), findsOneWidget);
     expect(find.text('No reading plans yet'), findsOneWidget);
     expect(find.text('New plan'), findsOneWidget);
+    expect(find.text('created by radley'), findsOneWidget);
   });
 }

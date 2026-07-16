@@ -2,14 +2,15 @@
 
 [![CI](https://github.com/RadleyRoy/Bible-Reading-Tracker/actions/workflows/ci.yml/badge.svg)](https://github.com/RadleyRoy/Bible-Reading-Tracker/actions/workflows/ci.yml)
 
-A simple, offline Android app for tracking your KJV Bible reading. Pick what
-you want to read and when you want to finish — the app splits the chapters
-into daily portions that are **balanced by word count**, so every day's
-reading takes about the same amount of time whether you're in Psalm 117 or
-Psalm 119.
+A simple, fully offline Android app for reading and tracking the KJV Bible.
+Pick what you want to read and when you want to finish — the app splits the
+chapters into daily portions that are **balanced by word count**, so every
+day's reading takes about the same amount of time whether you're in
+Psalm 117 or Psalm 119. The complete KJV text is bundled, so you read right
+in the app.
 
-Built with Flutter. No account, no network access, no ads — your reading
-progress is stored on your phone.
+Built with Flutter. No account, no network access, no ads — the text and
+your reading progress live on your phone.
 
 ## Features
 
@@ -27,6 +28,12 @@ progress is stored on your phone.
   shrink. You always land on your end date.
 - **Tap to track** — check off today's chapters, or open any book and toggle
   any chapter read/unread to fix mistakes or log reading done elsewhere.
+- **Read in the app, offline** — the whole KJV (31,102 verses) ships inside
+  the app. A **Read** tab lets you open any book and chapter, and remembers
+  where you left off.
+- **Continue reading from a plan** — every plan has a "Continue reading"
+  button that opens the exact chapter you should read next; "Mark read &
+  continue" checks it off and moves on, keeping the plan in sync.
 - **Restart** — reset a plan to unread and start over with one tap.
 
 ## How the scheduling works
@@ -48,8 +55,13 @@ progress is stored on your phone.
 - **Plans** — all your plans with progress bars and today's workload.
 - **New/Edit plan** — name, portion, end date, with a live preview of the
   daily load.
-- **Plan detail** — today's checklist, the next few days, overall progress,
-  and a per-book chapter grid for marking anything read or unread.
+- **Plan detail** — today's checklist, a "Continue reading" button, the next
+  few days, overall progress, and a per-book chapter grid for marking
+  anything read or unread.
+- **Read** — browse any book and chapter of the KJV, or continue where you
+  left off.
+- **Reader** — clean chapter view with verse numbers, previous/next
+  navigation, and (from a plan) one-tap "Mark read & continue".
 
 ## Installing
 
@@ -80,11 +92,21 @@ apps" for your file manager), or with USB debugging enabled run:
 flutter install
 ```
 
-## Regenerating the word-count data
+## Regenerating the bundled data
+
+Both scripts pull the public-domain KJV JSON from
+[aruljohn/Bible-kjv](https://github.com/aruljohn/Bible-kjv):
 
 ```powershell
+# Per-chapter word counts (lib/data/kjv_data.dart)
 powershell -ExecutionPolicy Bypass -File tool\generate_kjv_data.ps1
+
+# Full text assets (assets/kjv/*.json)
+powershell -ExecutionPolicy Bypass -File tool\fetch_kjv_text.ps1
 ```
+
+The launcher icon masters live in `assets/icon/`; regenerate the Android
+mipmaps with `dart run flutter_launcher_icons`.
 
 ## License
 
