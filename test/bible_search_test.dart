@@ -1,3 +1,4 @@
+import 'package:bible_reading/models/plan.dart';
 import 'package:bible_reading/services/bible_search.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -21,6 +22,25 @@ void main() {
   test('queries shorter than two characters return nothing', () async {
     expect(await searchBible('a'), isEmpty);
     expect(await searchBible('  '), isEmpty);
+  });
+
+  test('book filter narrows the scan', () async {
+    final johnOnly = await searchBible('shepherd', books: {42});
+    expect(johnOnly, isNotEmpty);
+    expect(johnOnly.every((h) => h.chapter.bookIndex == 42), isTrue);
+
+    final nt = await searchBible(
+      'shepherd',
+      books: {for (var b = 39; b < 66; b++) b},
+    );
+    final all = await searchBible('shepherd');
+    expect(
+      nt.every((h) => h.chapter.globalIndex >= bookStartIndex[39]),
+      isTrue,
+    );
+    expect(nt.length, lessThan(all.length));
+
+    expect(await searchBible('shepherd', books: {}), isEmpty);
   });
 
   test('multi-hit query returns verses in canonical order', () async {
