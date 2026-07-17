@@ -5,6 +5,8 @@ import '../data/kjv_data.dart';
 import '../models/plan.dart';
 import '../services/bible_text.dart';
 import '../services/plan_store.dart';
+import '../services/reader_settings.dart';
+import '../widgets/verse_text.dart';
 
 /// Reads a chapter of the bundled KJV text.
 ///
@@ -69,6 +71,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
   @override
   Widget build(BuildContext context) {
     final store = context.watch<PlanStore>();
+    final settings = context.watch<ReaderSettings>();
     final plan = widget.planId == null ? null : store.planById(widget.planId!);
     final chapter = allChapters[_index];
 
@@ -93,21 +96,11 @@ class _ReaderScreenState extends State<ReaderScreen> {
               itemCount: verses.length,
               itemBuilder: (context, i) => Padding(
                 padding: const EdgeInsets.only(bottom: 10),
-                child: Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: '${i + 1}  ',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                      TextSpan(text: verses[i]),
-                    ],
-                  ),
-                  style: const TextStyle(fontSize: 17, height: 1.6),
+                child: VerseText(
+                  number: i + 1,
+                  text: verses[i],
+                  fontFamily: settings.fontFamily,
+                  fontSize: settings.fontSize,
                 ),
               ),
             ),

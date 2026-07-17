@@ -35,6 +35,9 @@ your reading progress live on your phone.
   button that opens the exact chapter you should read next; "Mark read &
   continue" checks it off and moves on, keeping the plan in sync.
 - **Restart** — reset a plan to unread and start over with one tap.
+- **Your reading font** — a Settings tab with bundled fonts (Lora,
+  Merriweather, EB Garamond, Open Sans — all SIL OFL) and a size slider,
+  previewed on sample text. Applies only to the Bible text, works offline.
 
 ## How the scheduling works
 

@@ -113,5 +113,17 @@ void main() {
     // The browser remembers where free reading left off.
     expect(find.text('Continue reading'), findsOneWidget);
     expect(find.text('Genesis 2'), findsOneWidget);
+
+    // Settings tab: pick a Bible font.
+    await tester.tap(find.text('Settings'));
+    await tester.pumpAndSettle();
+    expect(find.text('Bible text'), findsOneWidget);
+    expect(
+      find.textContaining('The LORD is my shepherd', findRichText: true),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('EB Garamond'));
+    await tester.pumpAndSettle();
+    expect(find.byIcon(Icons.check_circle), findsOneWidget);
   });
 }

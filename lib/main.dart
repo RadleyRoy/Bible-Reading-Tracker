@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'screens/home_screen.dart';
 import 'services/plan_store.dart';
+import 'services/reader_settings.dart';
 import 'theme.dart';
 
 void main() {
@@ -14,8 +15,11 @@ class BibleReadingApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => PlanStore()..load(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => PlanStore()..load()),
+        ChangeNotifierProvider(create: (_) => ReaderSettings()..load()),
+      ],
       child: MaterialApp(
         title: 'Bible Reading',
         debugShowCheckedModeBanner: false,

@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.1.0+2
+version: 1.2.0+3
 
 environment:
   sdk: ^3.12.2
@@ -62,6 +62,29 @@ flutter:
 
   assets:
     - assets/kjv/
+
+  # Reader fonts (assets/fonts/, fetched by tool/fetch_fonts.ps1; all OFL).
+  fonts:
+    - family: Lora
+      fonts:
+        - asset: assets/fonts/Lora/Lora-Regular.ttf
+        - asset: assets/fonts/Lora/Lora-Bold.ttf
+          weight: 700
+    - family: Merriweather
+      fonts:
+        - asset: assets/fonts/Merriweather/Merriweather-Regular.ttf
+        - asset: assets/fonts/Merriweather/Merriweather-Bold.ttf
+          weight: 700
+    - family: EB Garamond
+      fonts:
+        - asset: assets/fonts/EBGaramond/EBGaramond-Regular.ttf
+        - asset: assets/fonts/EBGaramond/EBGaramond-Bold.ttf
+          weight: 700
+    - family: Open Sans
+      fonts:
+        - asset: assets/fonts/OpenSans/OpenSans-Regular.ttf
+        - asset: assets/fonts/OpenSans/OpenSans-Bold.ttf
+          weight: 700
 
 # Launcher icon (masters in assets/icon/, not bundled into the app).
 # Regenerate the Android mipmaps with:  dart run flutter_launcher_icons

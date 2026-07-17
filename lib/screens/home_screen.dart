@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'bible_browser_screen.dart';
 import 'plans_list_screen.dart';
+import 'settings_screen.dart';
 
 /// App home: the plan tracker and the Bible reader, side by side.
 class HomeScreen extends StatefulWidget {
@@ -19,7 +20,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: IndexedStack(
         index: _tab,
-        children: const [PlansListScreen(), BibleBrowserScreen()],
+        children: const [
+          PlansListScreen(),
+          BibleBrowserScreen(),
+          SettingsScreen(),
+        ],
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _tab,
@@ -27,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
         destinations: const [
           NavigationDestination(icon: Icon(Icons.checklist), label: 'Plans'),
           NavigationDestination(icon: Icon(Icons.menu_book), label: 'Read'),
+          NavigationDestination(icon: Icon(Icons.settings), label: 'Settings'),
         ],
       ),
     );
