@@ -118,6 +118,94 @@ void main() {
     expect(title.style?.fontFamily, isNot('Lora'));
   });
 
+  testWidgets('auto-mark checks the chapter off when scrolled to the end', (
+    tester,
+  ) async {
+    final store = PlanStore();
+    await store.load();
+    final settings = ReaderSettings();
+    await settings.load();
+    await settings.setAutoMark(true);
+    final today = DateTime.now();
+    final plan = Plan(
+      id: 'p1',
+      name: 'NT plan',
+      startBook: 39,
+      endBook: 65,
+      startDate: today,
+      endDate: today.add(const Duration(days: 89)),
+    );
+    await store.addPlan(plan);
+    final matthew1 = bookStartIndex[39];
+
+    await pumpReader(
+      tester,
+      globalIndex: matthew1,
+      planId: 'p1',
+      store: store,
+      settings: settings,
+    );
+    expect(plan.isRead(matthew1), isFalse);
+
+    await tester.drag(find.byType(ListView), const Offset(0, -20000));
+    await tester.pumpAndSettle();
+
+    expect(plan.isRead(matthew1), isTrue);
+    await tester.pump(const Duration(seconds: 5)); // let the snackbar expire
+  });
+
+  testWidgets('auto-mark handles chapters that fit on one screen', (
+    tester,
+  ) async {
+    final store = PlanStore();
+    await store.load();
+    final settings = ReaderSettings();
+    await settings.load();
+    await settings.setAutoMark(true);
+    final today = DateTime.now();
+    final plan = Plan(
+      id: 'p1',
+      name: 'Psalms',
+      startBook: 18,
+      endBook: 18,
+      startDate: today,
+      endDate: today.add(const Duration(days: 29)),
+    );
+    await store.addPlan(plan);
+    final psalm117 = bookStartIndex[18] + 116; // 2 verses, no scrolling
+
+    await pumpReader(
+      tester,
+      globalIndex: psalm117,
+      planId: 'p1',
+      store: store,
+      settings: settings,
+    );
+    expect(plan.isRead(psalm117), isTrue);
+    await tester.pump(const Duration(seconds: 5)); // let the snackbar expire
+  });
+
+  testWidgets('no auto-mark when the setting is off', (tester) async {
+    final store = PlanStore();
+    await store.load();
+    final today = DateTime.now();
+    final plan = Plan(
+      id: 'p1',
+      name: 'NT plan',
+      startBook: 39,
+      endBook: 65,
+      startDate: today,
+      endDate: today.add(const Duration(days: 89)),
+    );
+    await store.addPlan(plan);
+    final matthew1 = bookStartIndex[39];
+
+    await pumpReader(tester, globalIndex: matthew1, planId: 'p1', store: store);
+    await tester.drag(find.byType(ListView), const Offset(0, -20000));
+    await tester.pumpAndSettle();
+    expect(plan.isRead(matthew1), isFalse);
+  });
+
   testWidgets('an already-read chapter shows a read indicator', (tester) async {
     final store = PlanStore();
     await store.load();

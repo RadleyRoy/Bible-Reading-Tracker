@@ -12,7 +12,8 @@ class BibleText {
 
   static final Map<int, List<List<String>>> _books = {};
 
-  static Future<List<List<String>>> _book(int bookIndex) async {
+  /// All chapters of a book, each a list of verse strings.
+  static Future<List<List<String>>> book(int bookIndex) async {
     final cached = _books[bookIndex];
     if (cached != null) return cached;
     final raw = await rootBundle.loadString('assets/kjv/$bookIndex.json');
@@ -25,8 +26,14 @@ class BibleText {
 
   /// Verses of the given 1-based [chapter] of the book.
   static Future<List<String>> chapterVerses(int bookIndex, int chapter) async {
-    final book = await _book(bookIndex);
-    return book[chapter - 1];
+    return (await book(bookIndex))[chapter - 1];
+  }
+
+  /// Loads every book into the cache (used before whole-Bible search).
+  static Future<void> ensureAllLoaded() async {
+    for (var b = 0; b < 66; b++) {
+      await book(b);
+    }
   }
 }
 

@@ -35,7 +35,7 @@ class PlansListScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(bottom: 6),
             child: Text(
-              'created by radley',
+              'created by Radley',
               style: Theme.of(context).textTheme.bodySmall!.copyWith(
                 color: Theme.of(context).colorScheme.outline,
               ),

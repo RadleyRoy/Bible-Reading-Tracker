@@ -38,6 +38,12 @@ your reading progress live on your phone.
 - **Your reading font** — a Settings tab with bundled fonts (Lora,
   Merriweather, EB Garamond, Open Sans — all SIL OFL) and a size slider,
   previewed on sample text. Applies only to the Bible text, works offline.
+- **Offline search** — full-text search across all 31,102 verses from the
+  Read tab; tap a result to open the chapter with the verse highlighted.
+- **Auto-mark** — optional: when reading from a plan, reaching the end of a
+  chapter checks it off automatically.
+- **Daily reminder** — optional notification at a time you choose to keep
+  the plan on track.
 
 ## How the scheduling works
 

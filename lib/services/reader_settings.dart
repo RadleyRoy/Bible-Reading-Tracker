@@ -15,6 +15,7 @@ class ReaderFont {
 class ReaderSettings extends ChangeNotifier {
   static const _familyKey = 'reader_font_family';
   static const _sizeKey = 'reader_font_size';
+  static const _autoMarkKey = 'reader_auto_mark';
 
   static const double defaultSize = 17;
   static const double minSize = 14;
@@ -31,15 +32,27 @@ class ReaderSettings extends ChangeNotifier {
 
   String? _fontFamily;
   double _fontSize = defaultSize;
+  bool _autoMark = false;
 
   String? get fontFamily => _fontFamily;
   double get fontSize => _fontSize;
+
+  /// When reading from a plan, reaching the end of a chapter marks it read.
+  bool get autoMark => _autoMark;
 
   Future<void> load() async {
     final prefs = await SharedPreferences.getInstance();
     _fontFamily = prefs.getString(_familyKey);
     _fontSize = prefs.getDouble(_sizeKey) ?? defaultSize;
+    _autoMark = prefs.getBool(_autoMarkKey) ?? false;
     notifyListeners();
+  }
+
+  Future<void> setAutoMark(bool value) async {
+    _autoMark = value;
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_autoMarkKey, value);
   }
 
   Future<void> setFontFamily(String? family) async {

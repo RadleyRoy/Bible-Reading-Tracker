@@ -4,6 +4,7 @@ import '../data/kjv_data.dart';
 import '../models/plan.dart';
 import '../services/bible_text.dart';
 import 'reader_screen.dart';
+import 'search_screen.dart';
 
 /// Free reading: pick any book and chapter of the KJV, with a shortcut to
 /// continue from the last chapter read outside a plan.
@@ -41,7 +42,19 @@ class _BibleBrowserScreenState extends State<BibleBrowserScreen> {
     final last = _lastPosition;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Read the Bible')),
+      appBar: AppBar(
+        title: const Text('Read the Bible'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            tooltip: 'Search the Bible',
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const SearchScreen()),
+            ),
+          ),
+        ],
+      ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(12, 8, 12, 16),
         children: [

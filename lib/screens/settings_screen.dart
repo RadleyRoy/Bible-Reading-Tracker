@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../services/reader_settings.dart';
+import '../services/reminder_service.dart';
 import '../widgets/verse_text.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -10,6 +11,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<ReaderSettings>();
+    final reminder = context.watch<ReminderService>();
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -86,6 +88,59 @@ class SettingsScreen extends StatelessWidget {
               child: const Text('Reset to defaults'),
             ),
           ),
+          const Divider(height: 32),
+          Text('Reading', style: theme.textTheme.titleMedium),
+          SwitchListTile(
+            contentPadding: EdgeInsets.zero,
+            title: const Text('Mark chapters read at the end'),
+            subtitle: const Text(
+              'When reading from a plan, reaching the end of a chapter '
+              'checks it off automatically',
+            ),
+            value: settings.autoMark,
+            onChanged: (v) => context.read<ReaderSettings>().setAutoMark(v),
+          ),
+          const Divider(height: 32),
+          Text('Daily reminder', style: theme.textTheme.titleMedium),
+          SwitchListTile(
+            contentPadding: EdgeInsets.zero,
+            title: const Text('Remind me to read'),
+            subtitle: const Text('A daily notification at the time you pick'),
+            value: reminder.enabled,
+            onChanged: (v) async {
+              final messenger = ScaffoldMessenger.of(context);
+              final ok = await context.read<ReminderService>().setEnabled(v);
+              if (!ok) {
+                messenger.showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      'Notification permission was denied — allow '
+                      'notifications for Bible Reading in system settings.',
+                    ),
+                  ),
+                );
+              }
+            },
+          ),
+          if (reminder.enabled)
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              title: const Text('Reminder time'),
+              trailing: Text(
+                reminder.time.format(context),
+                style: theme.textTheme.titleMedium,
+              ),
+              onTap: () async {
+                final service = context.read<ReminderService>();
+                final picked = await showTimePicker(
+                  context: context,
+                  initialTime: reminder.time,
+                  helpText: 'Remind me to read at',
+                );
+                if (picked != null) await service.setTime(picked);
+              },
+            ),
+          const SizedBox(height: 16),
         ],
       ),
     );

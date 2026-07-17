@@ -1,5 +1,6 @@
 import 'package:bible_reading/screens/settings_screen.dart';
 import 'package:bible_reading/services/reader_settings.dart';
+import 'package:bible_reading/services/reminder_service.dart';
 import 'package:bible_reading/widgets/verse_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -17,9 +18,14 @@ void main() {
     SharedPreferences.setMockInitialValues({});
     final settings = ReaderSettings();
     await settings.load();
+    final reminder = ReminderService(supported: false);
+    await reminder.load();
     await tester.pumpWidget(
-      ChangeNotifierProvider.value(
-        value: settings,
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(value: settings),
+          ChangeNotifierProvider.value(value: reminder),
+        ],
         child: const MaterialApp(home: SettingsScreen()),
       ),
     );
@@ -62,8 +68,11 @@ void main() {
     await tester.pumpAndSettle();
     await tester.drag(find.byType(Slider), const Offset(400, 0));
     await tester.pumpAndSettle();
-
     expect(settings.fontSize, ReaderSettings.maxSize);
+
+    // Scroll back up: the sample card reflects the new size.
+    await tester.drag(find.byType(ListView), const Offset(0, 300));
+    await tester.pumpAndSettle();
     expect(sampleText(tester).style?.fontSize, ReaderSettings.maxSize);
   });
 
@@ -80,9 +89,11 @@ void main() {
 
     await tester.tap(find.text('Reset to defaults'));
     await tester.pumpAndSettle();
-
     expect(settings.fontFamily, isNull);
     expect(settings.fontSize, ReaderSettings.defaultSize);
+
+    await tester.drag(find.byType(ListView), const Offset(0, 300));
+    await tester.pumpAndSettle();
     expect(sampleText(tester).style?.fontSize, ReaderSettings.defaultSize);
   });
 }

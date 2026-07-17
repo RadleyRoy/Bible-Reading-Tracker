@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'screens/home_screen.dart';
 import 'services/plan_store.dart';
 import 'services/reader_settings.dart';
+import 'services/reminder_service.dart';
 import 'theme.dart';
 
 void main() {
@@ -19,6 +20,7 @@ class BibleReadingApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => PlanStore()..load()),
         ChangeNotifierProvider(create: (_) => ReaderSettings()..load()),
+        ChangeNotifierProvider(create: (_) => ReminderService()..load()),
       ],
       child: MaterialApp(
         title: 'Bible Reading',
