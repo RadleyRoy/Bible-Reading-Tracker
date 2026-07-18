@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../services/reader_settings.dart';
 import '../services/reminder_service.dart';
+import '../widgets/backup_section.dart';
 import '../widgets/verse_text.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -140,6 +141,8 @@ class SettingsScreen extends StatelessWidget {
                 if (picked != null) await service.setTime(picked);
               },
             ),
+          const Divider(height: 32),
+          const BackupSection(),
           const SizedBox(height: 16),
         ],
       ),

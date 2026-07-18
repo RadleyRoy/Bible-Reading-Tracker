@@ -46,6 +46,9 @@ your reading progress live on your phone.
   chapter checks it off automatically.
 - **Daily reminder** — optional notification at a time you choose to keep
   the plan on track.
+- **Backup & restore** — export all plans, progress, and settings to a JSON
+  file (share it to Drive, email, or Files) and import it after a reinstall
+  or on a new phone.
 
 ## How the scheduling works
 

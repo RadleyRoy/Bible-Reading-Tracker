@@ -33,6 +33,17 @@ void main() {
     return settings;
   }
 
+  testWidgets('shows the backup section', (tester) async {
+    await pumpSettings(tester);
+    await tester.dragUntilVisible(
+      find.text('Export backup'),
+      find.byType(ListView),
+      const Offset(0, -200),
+    );
+    expect(find.text('Export backup'), findsOneWidget);
+    expect(find.text('Import backup'), findsOneWidget);
+  });
+
   testWidgets('shows the sample verse and all font options', (tester) async {
     await pumpSettings(tester);
     expect(find.textContaining(sample, findRichText: true), findsOneWidget);
