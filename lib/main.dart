@@ -23,7 +23,7 @@ class BibleReadingApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ReminderService()..load()),
       ],
       child: MaterialApp(
-        title: 'Bible Reading',
+        title: 'Bible',
         debugShowCheckedModeBanner: false,
         theme: lightTheme(),
         darkTheme: darkTheme(),

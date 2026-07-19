@@ -116,7 +116,7 @@ class SettingsScreen extends StatelessWidget {
                   const SnackBar(
                     content: Text(
                       'Notification permission was denied — allow '
-                      'notifications for Bible Reading in system settings.',
+                      'notifications for Bible in system settings.',
                     ),
                   ),
                 );

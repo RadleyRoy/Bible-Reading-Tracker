@@ -42,8 +42,8 @@ class _BackupSectionState extends State<BackupSection> {
       await SharePlus.instance.share(
         ShareParams(
           files: [XFile(file.path, mimeType: 'application/json', name: name)],
-          subject: 'Bible Reading backup',
-          title: 'Bible Reading backup',
+          subject: 'Bible backup',
+          title: 'Bible backup',
         ),
       );
     } catch (e) {

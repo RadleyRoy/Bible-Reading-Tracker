@@ -1,4 +1,4 @@
-# Bible Reading Tracker
+# Bible
 
 [![CI](https://github.com/RadleyRoy/Bible-Reading-Tracker/actions/workflows/ci.yml/badge.svg)](https://github.com/RadleyRoy/Bible-Reading-Tracker/actions/workflows/ci.yml)
 
@@ -79,7 +79,7 @@ your reading progress live on your phone.
 
 ## Installing
 
-Grab `bible-reading-tracker-<version>.apk` from the
+Grab `bible-<version>.apk` from the
 [Releases page](https://github.com/RadleyRoy/Bible-Reading-Tracker/releases)
 on your phone and open it to install (allow "Install unknown apps" if asked).
 Every push to `main` is also validated by CI — formatting, static analysis,

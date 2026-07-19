@@ -86,7 +86,7 @@ class BackupService {
       final decoded = jsonDecode(json);
       if (decoded is! Map<String, dynamic>) {
         throw const BackupFormatException(
-          "This doesn't look like a Bible Reading backup.",
+          "This doesn't look like a Bible backup.",
         );
       }
       doc = decoded;
@@ -98,14 +98,14 @@ class BackupService {
 
     if (doc['app'] != _appId) {
       throw const BackupFormatException(
-        "This doesn't look like a Bible Reading backup.",
+        "This doesn't look like a Bible backup.",
       );
     }
     final version = doc['formatVersion'];
     if (version is! int || version > formatVersion) {
       throw const BackupFormatException(
         'This backup was made by a newer version of the app. '
-        'Update Bible Reading and try again.',
+        'Update Bible and try again.',
       );
     }
 

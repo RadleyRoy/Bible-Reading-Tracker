@@ -36,10 +36,10 @@ jobs:
       - name: Rename APK
         run: |
           cp build/app/outputs/flutter-apk/app-release.apk \
-             "bible-reading-tracker-${GITHUB_REF_NAME}.apk"
+             "bible-${GITHUB_REF_NAME}.apk"
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v3
         with:
-          files: bible-reading-tracker-*.apk
+          files: bible-*.apk
           generate_release_notes: true

@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.5.0+6
+version: 1.6.0+7
 
 environment:
   sdk: ^3.12.2
@@ -99,10 +99,10 @@ flutter_launcher_icons:
   ios: false
   # Legacy launcher icon (Android 7 and below, and the round-icon fallback)
   image_path: "assets/icon/ic_launcher-1024.png"
-  # Adaptive icon (Android 8+): foreground floats on the background layer,
-  # which the launcher masks into a circle / squircle / rounded square.
+  # Adaptive icon (Android 8+): the medallion foreground floats on the brand
+  # blue, which the launcher masks into a circle / squircle / rounded square.
   adaptive_icon_foreground: "assets/icon/ic_launcher_foreground-1024.png"
-  adaptive_icon_background: "assets/icon/ic_launcher_background-1024.png"
+  adaptive_icon_background: "#0D51FB"
   min_sdk_android: 21
 
   # To add assets to your application, add an assets section, like this:

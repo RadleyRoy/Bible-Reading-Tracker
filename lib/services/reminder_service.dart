@@ -105,7 +105,7 @@ class ReminderService extends ChangeNotifier {
     if (!next.isAfter(now)) next = next.add(const Duration(days: 1));
     await _plugin!.zonedSchedule(
       id: _notificationId,
-      title: 'Bible Reading',
+      title: 'Bible',
       body: "Today's chapters are waiting — keep your plan on track.",
       scheduledDate: next,
       notificationDetails: const NotificationDetails(

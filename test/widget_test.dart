@@ -8,7 +8,7 @@ void main() {
     await tester.pumpWidget(const BibleReadingApp());
     await tester.pumpAndSettle();
 
-    expect(find.text('Bible Reading Plans'), findsOneWidget);
+    expect(find.text('Reading Plans'), findsOneWidget);
     expect(find.text('No reading plans yet'), findsOneWidget);
     expect(find.text('New plan'), findsOneWidget);
     expect(find.text('created by Radley'), findsOneWidget);

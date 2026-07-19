@@ -17,7 +17,7 @@ class PlansListScreen extends StatelessWidget {
     final store = context.watch<PlanStore>();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Bible Reading Plans')),
+      appBar: AppBar(title: const Text('Reading Plans')),
       body: Column(
         children: [
           Expanded(
